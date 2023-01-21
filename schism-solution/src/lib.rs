@@ -29,6 +29,29 @@ impl ConductanceMatrix {
 
         row_col
     }
+
+    pub fn from(matrix: Vec<Vec<f64>>) -> Self {
+        let n = matrix.len();
+        let m = matrix.get(0).expect("Matrix empty").len();
+
+        let mut cm = Self::new(n, m);
+
+        (0..n)
+            .into_iter()
+                .for_each(|n_prime| {
+                    let row = matrix.get(n_prime).expect("Vector of Vectors not Large enough for N");
+
+                    (0..m)
+                        .into_iter()
+                        .for_each(|m_prime| {
+                            let row_col = row.get(m_prime).expect("Vector member of given matrix not large enough for M");
+                            
+                            cm[(n_prime, m_prime)] = row_col.clone();
+                        });
+                });
+
+        cm
+    }
 }
 
 impl std::ops::Index<(usize, usize)> for ConductanceMatrix {
@@ -51,3 +74,4 @@ impl std::ops::IndexMut<(usize, usize)> for ConductanceMatrix {
         row_col
     }
 }
+
